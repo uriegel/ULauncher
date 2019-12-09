@@ -11,10 +11,6 @@
         android:stateNotNeeded="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AppsActivity"
-            android:theme="@style/Theme.Transparent">
-            </activity>
-        <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.Transparent">
             <intent-filter>
