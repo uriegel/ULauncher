@@ -6,10 +6,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/AppTheme"
         android:launchMode="singleTask"
-        android:stateNotNeeded="true">
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:stateNotNeeded="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".AppsActivity"
+            android:theme="@style/Theme.Transparent">
+            </activity>
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.Transparent">
