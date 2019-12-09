@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.TextView
 import android.view.ViewGroup
@@ -11,14 +12,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_apps.*
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
+import android.view.WindowManager
+import androidx.core.graphics.drawable.toBitmap
 
 class AppsActivity : AppCompatActivity() {
 
@@ -26,9 +21,12 @@ class AppsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apps)
 
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
         loadApps()
         loadListView()
-        list!!.setOnItemClickListener { parent, view, position, id ->
+        list!!.setOnItemClickListener { _, _, position, _ ->
             val i = manager!!.getLaunchIntentForPackage(apps!!.get(position).name!!.toString())
             this@AppsActivity.startActivity(i)
         }
@@ -47,6 +45,8 @@ class AppsActivity : AppCompatActivity() {
             app.label = ri.loadLabel(manager)
             app.name = ri.activityInfo.packageName
             app.icon = ri.activityInfo.loadIcon(manager)
+            //val bm = app!!.icon!!.toBitmap()
+            //bm.compress(Bitmap.CompressFormat.PNG, 1, )
             apps!!.add(app)
         }
     }
