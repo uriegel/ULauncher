@@ -1,22 +1,15 @@
 package de.uriegel.ulauncher
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.TextView
-import android.os.Build.VERSION_CODES
 import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
+import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.ceil
-import android.widget.LinearLayout
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,37 +20,37 @@ class MainActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-        statusBarHeight = getStatusBarHeight(this)
+        //statusBarHeight = getStatusBarHeight(this)
 
+        apps_list.adapter = appsAdapter
         loadApps()
-        loadListView()
-        list!!.setOnItemClickListener { _, _, position, _ ->
-            val i = manager!!.getLaunchIntentForPackage(apps!!.get(position).name!!.toString())
-            this@MainActivity.startActivity(i)
-        }
     }
 
     private fun loadApps() {
-        manager = packageManager
-        apps = ArrayList()
-
         val i = Intent(Intent.ACTION_MAIN, null)
         i.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val availableActivities = manager!!.queryIntentActivities(i, 0)
-        for (ri in availableActivities) {
-            val app = AppDetail()
-            app.label = ri.loadLabel(manager)
-            app.name = ri.activityInfo.packageName
-            app.icon = ri.activityInfo.loadIcon(manager)
+        val availableActivities = packageManager.queryIntentActivities(i, 0)
+        val apps = availableActivities.map {
+            AppDetail(
+                it.loadLabel(packageManager).toString(),
+                it.activityInfo.packageName,
+                it.activityInfo.loadIcon(packageManager),
+                View.OnClickListener { _ ->
+                    val intent = packageManager.getLaunchIntentForPackage(it.activityInfo.packageName)
+                    this@MainActivity.startActivity(intent)
+                })
+        }.sortedBy {
+            it.label
+        }
+        for (app in apps) {
             //val bm = app!!.icon!!.toBitmap()
             //bm.compress(Bitmap.CompressFormat.PNG, 1, )
-            apps!!.add(app)
+            appsList.add(app)
         }
     }
 
-    private fun loadListView() {
-        list = apps_list
+    /*private fun loadListView() {
 
         val adapter = object : ArrayAdapter<AppDetail>(
             this,
@@ -76,10 +69,10 @@ class MainActivity : AppCompatActivity() {
                 appIcon.setImageDrawable(apps!!.get(position).icon)
 
                 val appLabel = convertView!!.findViewById(R.id.item_app_label) as TextView
-                appLabel.text = apps!!.get(position).label
+                appLabel.text = apps!![position].label
 
                 val appName = convertView!!.findViewById(R.id.item_app_name) as TextView
-                appName.text = apps!!.get(position).name
+                appName.text = apps!![position].name
 
 
                 return convertView!!
@@ -87,21 +80,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         list!!.adapter = adapter
-    }
+    }*/
 
     private fun getStatusBarHeight(context: Context): Int {
         val resources = context.resources
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         return when {
             resourceId > 0 -> resources.getDimensionPixelSize(resourceId)
-            else -> ceil((if (VERSION.SDK_INT >= VERSION_CODES.M) 24 else 25) * resources.displayMetrics.density).toInt()
+            else -> ceil(24 * resources.displayMetrics.density).toInt()
         }
 
     }
 
-    private var manager: PackageManager? = null
-    private var apps: ArrayList<AppDetail>? = null
-    private var list: ListView? = null
+    private val appsList = ArrayList<AppDetail>()
     private var statusBarHeight = 0
+    private val appsAdapter = AppsRecyclerAdapter(appsList)
 }
 
