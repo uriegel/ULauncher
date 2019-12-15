@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.ceil
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         //statusBarHeight = getStatusBarHeight(this)
 
+        apps_list.layoutManager = GridLayoutManager(this, 3)
         apps_list.adapter = appsAdapter
         loadApps()
     }
