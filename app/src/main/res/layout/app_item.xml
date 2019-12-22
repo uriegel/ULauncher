@@ -4,12 +4,15 @@
     <data>
         <variable name="app" type="de.uriegel.ulauncher.AppDetail" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/listItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:onClick="@{app.onClick}">
+        android:layout_margin="2dp"
+        android:background="@color/colorTile"
+        android:onClick="@{app.onClick}"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imageView2"

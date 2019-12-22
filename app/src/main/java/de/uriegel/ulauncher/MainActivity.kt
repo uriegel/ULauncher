@@ -2,13 +2,14 @@ package de.uriegel.ulauncher
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.EdgeEffect
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.ceil
 
@@ -21,10 +22,15 @@ class MainActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-        //statusBarHeight = getStatusBarHeight(this)
-
         apps_list.layoutManager = GridLayoutManager(this, 3)
         apps_list.adapter = appsAdapter
+
+        apps_list.edgeEffectFactory = object : RecyclerView.EdgeEffectFactory() {
+            override fun createEdgeEffect(view: RecyclerView, direction: Int): EdgeEffect {
+                return EdgeEffect(view.context).apply { color = Color.BLUE }
+            }
+        }
+
         loadApps()
     }
 
@@ -84,18 +90,7 @@ class MainActivity : AppCompatActivity() {
         list!!.adapter = adapter
     }*/
 
-    private fun getStatusBarHeight(context: Context): Int {
-        val resources = context.resources
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        return when {
-            resourceId > 0 -> resources.getDimensionPixelSize(resourceId)
-            else -> ceil(24 * resources.displayMetrics.density).toInt()
-        }
-
-    }
-
     private val appsList = ArrayList<AppDetail>()
-    private var statusBarHeight = 0
     private val appsAdapter = AppsRecyclerAdapter(appsList)
 }
 

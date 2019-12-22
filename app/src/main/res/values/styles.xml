@@ -18,6 +18,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textColor">@color/colorText</item>
 
+        <item name="android:colorEdgeEffect">@android:color/holo_blue_dark</item>
+
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
 

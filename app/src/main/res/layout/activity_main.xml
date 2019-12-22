@@ -9,6 +9,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/apps_list"
+        android:paddingTop="24dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="2dp"
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>
